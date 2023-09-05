@@ -32,8 +32,8 @@ export const accessFile = async (uri: vscode.Uri, untitledDocumentData?: Uint8Ar
 			const { uid, gid } = os.userInfo();
 
 			const isReadonly: boolean = (uid === -1 || uid === fileStats.uid) ? !(fileStats.mode & 0o200) :	// owner		 
-										(gid === fileStats.gid) ? !(fileStats.mode & 0o020) : // group
-										!(fileStats.mode & 0o002); // other	
+				(gid === fileStats.gid) ? !(fileStats.mode & 0o020) : // group
+					!(fileStats.mode & 0o002); // other	
 
 			if (fileStats.isFile()) {
 				return new NativeFileAccessor(uri, isReadonly, fs);
@@ -328,6 +328,7 @@ class UntitledFileAccessor extends SimpleFileAccessor {
 class DebugFileAccessor implements FileAccessor {
 	public readonly supportsIncremetalAccess = true;
 	public readonly uri: string;
+	readonly baseAddress: number;
 
 	/**
 	 * Page size is smaller than the native filesystem, since large pages are
@@ -337,6 +338,14 @@ class DebugFileAccessor implements FileAccessor {
 	public readonly pageSize = 4 * 1024;
 
 	constructor(uri: vscode.Uri, public readonly isReadonly: boolean) {
+
+		//get base address from uri
+		let debugAddress = uri.path.split("/").slice(0, -1).join("");
+
+		//copied from HexDocument.parseHexOrDecInt()
+		debugAddress = debugAddress.toLowerCase();
+		this.baseAddress = debugAddress.startsWith("0x") ? parseInt(debugAddress.substring(2), 16) : parseInt(debugAddress, 10);
+
 		this.uri = uri.toString();
 	}
 
@@ -367,7 +376,29 @@ class DebugFileAccessor implements FileAccessor {
 	}
 
 	private referenceRange(from: number, to: number) {
-		return vscode.Uri.parse(this.uri).with({ query: `?range=${from}:${to}` });
+
+		//convert from/to to be relative to base address
+
+		let baseAddress = this.baseAddress;
+		from -= baseAddress;
+		to -= baseAddress;
+
+		//ensure no negative offsets
+		while (from < 0) {
+			from += this.pageSize;
+			to += this.pageSize;
+			baseAddress -= this.pageSize;
+		}
+
+		//negative base address cause issues. round to first block
+		if (baseAddress < 0) {
+			from = 0;
+			to = this.pageSize;
+			baseAddress = 0;
+		}
+
+		return vscode.Uri.parse(this.uri).with({ path: `/0x${baseAddress.toString(16)}/memory.bin`, query: `?range=${from}:${to}` });
+
 	}
 
 	public invalidate(): void {
