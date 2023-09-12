@@ -358,7 +358,18 @@ class DebugFileAccessor implements FileAccessor {
 	}
 
 	async read(offset: number, data: Uint8Array): Promise<number> {
-		const contents = await vscode.workspace.fs.readFile(this.referenceRange(offset, offset + data.length));
+		const debugSession = vscode.debug.activeDebugSession;
+		if (debugSession == undefined) {
+			return 0;
+		}
+		const body = await debugSession.customRequest("readMemory",
+			{
+				"memoryReference": this.baseAddress.toString(),
+				"offset": offset - this.baseAddress,
+				"count": data.length
+			});
+
+		const contents = Buffer.from(body["data"], "base64");
 		const cpy = Math.min(data.length, contents.length);
 		data.set(contents.subarray(0, cpy));
 		return cpy;
