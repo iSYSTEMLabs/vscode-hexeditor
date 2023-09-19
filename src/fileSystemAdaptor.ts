@@ -358,21 +358,33 @@ class DebugFileAccessor implements FileAccessor {
 	}
 
 	async read(offset: number, data: Uint8Array): Promise<number> {
+		// get reference do debug session and its DAP
 		const debugSession = vscode.debug.activeDebugSession;
 		if (debugSession == undefined) {
 			return 0;
 		}
-		const body = await debugSession.customRequest("readMemory",
-			{
-				"memoryReference": this.baseAddress.toString(),
-				"offset": offset - this.baseAddress,
-				"count": data.length
-			});
+		let readData = 0;
+		while (readData < data.length) {
+			// try to read data until end of block
+			const body = await debugSession.customRequest("readMemory",
+				{
+					"memoryReference": this.baseAddress.toString(),
+					"offset": offset - this.baseAddress + readData,
+					"count": data.length - readData
+				});
+			const contents = Buffer.from(body["data"], "base64");
+			const cpy = Math.min(data.length, contents.length);
+			data.set(contents.subarray(0, cpy), readData);
+			readData += cpy;
+			// if any data could not be read, update readData so next request will succeed
+			if (body["unreadableBytes"]) {
+				//TODO: instead of a message, the unreadable bytes should be marked somehow on UI
+				vscode.window.showInformationMessage("Failed to read " + body["unreadableBytes"] + " bytes at address 0x" + (offset + readData).toString(16) + "!");
+				readData += body["unreadableBytes"];
+			}
+		}
 
-		const contents = Buffer.from(body["data"], "base64");
-		const cpy = Math.min(data.length, contents.length);
-		data.set(contents.subarray(0, cpy));
-		return cpy;
+		return readData;
 	}
 
 	async writeStream(): Promise<void> {
