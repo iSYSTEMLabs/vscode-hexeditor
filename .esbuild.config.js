@@ -73,14 +73,13 @@ esbuild
 		bundle: true,
 		external: ["vscode"],
 		sourcemap: watch,
-		minify,
 		watch,
 		platform: "browser",
 		outfile: "dist/editor.js",
 		define: defineProd
 			? {
-					"process.env.NODE_ENV": defineProd ? '"production"' : '"development"',
-			  }
+				"process.env.NODE_ENV": defineProd ? '"production"' : '"development"',
+			}
 			: undefined,
 		plugins: [svgr(), css({ v2: true, filter: /\.css$/i })],
 	})

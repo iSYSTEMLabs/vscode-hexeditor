@@ -1,3 +1,5 @@
+// Copyright (c) TASKING
+// Contains work covered by the following terms:
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 

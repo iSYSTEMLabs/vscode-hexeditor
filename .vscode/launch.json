@@ -18,7 +18,10 @@
 					"../media/editor/*": "/*"
 				}
 			},
-			"args": ["--extensionDevelopmentPath=${workspaceFolder}"],
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--extensionDevelopmentPath=${workspaceFolder}/../extension"
+			],
 			"outFiles": ["${workspaceFolder}/out/**/*.js"]
 		},
 		{
