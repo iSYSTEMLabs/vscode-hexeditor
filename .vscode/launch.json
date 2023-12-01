@@ -22,7 +22,7 @@
 				"--extensionDevelopmentPath=${workspaceFolder}",
 				"--extensionDevelopmentPath=${workspaceFolder}/../extension"
 			],
-			"outFiles": ["${workspaceFolder}/out/**/*.js"]
+			"outFiles": ["${workspaceFolder}/dist/**/*.js"]
 		},
 		{
 			"name": "Run Web Extension",

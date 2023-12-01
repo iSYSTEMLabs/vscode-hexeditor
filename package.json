@@ -144,7 +144,7 @@
   "scripts": {
     "compile": "tsc --noEmit && node .esbuild.config.js",
     "lint": "eslint src --ext ts",
-    "watch": "tsc -watch -p ./",
+    "watch": "node .esbuild.config.js --watch",
     "test": "tsc --noEmit && node ./src/test/runTest.js"
   },
   "devDependencies": {
