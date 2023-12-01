@@ -1,5 +1,11 @@
 ## Release Notes
 
+## 1.9.13 - 
+
+- Renamed to Tasking HexEditor
+- Debug memory can now scroll up
+- Fixed debug memory showing whole page as empty if part of memory was unreadable
+
 ## 1.9.11 - January 25, 2023
 
 - Octal representation of the selected byte in the data inspector, thanks to [@brabli via #410](https://github.com/microsoft/vscode-hexeditor/pull/410)
