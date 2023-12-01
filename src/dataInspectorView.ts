@@ -1,3 +1,5 @@
+// Copyright (c) TASKING
+// Contains work covered by the following terms:
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
@@ -8,17 +10,17 @@ import { HexEditorRegistry } from "./hexEditorRegistry";
 import { randomString } from "./util";
 
 export class DataInspectorView extends Disposable implements vscode.WebviewViewProvider {
-	public static readonly viewType = "hexEditor.dataInspectorView";
+	public static readonly viewType = "TASKING-hexEditor.dataInspectorView";
 	private _view?: vscode.WebviewView;
 	private _lastMessage: unknown;
 
 	constructor(private readonly _extensionURI: vscode.Uri, registry: HexEditorRegistry) {
 		super();
 		this._register(registry.onDidChangeActiveDocument(doc => {
-			const inspectorType = vscode.workspace.getConfiguration("hexeditor").get("inspectorType");
+			const inspectorType = vscode.workspace.getConfiguration("tasking-hexeditor").get("inspectorType");
 			const shouldShow = inspectorType === InspectorLocation.Sidebar && !!doc;
 
-			vscode.commands.executeCommand("setContext", "hexEditor:showSidebarInspector", shouldShow);
+			vscode.commands.executeCommand("setContext", "TASKING-hexEditor:showSidebarInspector", shouldShow);
 			if (shouldShow) {
 				this.show({ autoReveal: true });
 			}
@@ -76,7 +78,7 @@ export class DataInspectorView extends Disposable implements vscode.WebviewViewP
 	 */
 	public show(options?: { forceFocus?: boolean; autoReveal?: boolean }): void {
 		// Don't reveal the panel if configured not to
-		if (options?.autoReveal && !vscode.workspace.getConfiguration("hexeditor.dataInspector").get("autoReveal", false)) {
+		if (options?.autoReveal && !vscode.workspace.getConfiguration("tasking-hexeditor.dataInspector").get("autoReveal", false)) {
 			return;
 		}
 
@@ -95,7 +97,7 @@ export class DataInspectorView extends Disposable implements vscode.WebviewViewP
 	private _getWebviewHTML(webview: vscode.Webview): string {
 		const scriptURI = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionURI, "dist", "inspector.js"));
 		const styleURI = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionURI, "dist", "inspector.css"));
-		const endianness = vscode.workspace.getConfiguration().get("hexeditor.defaultEndianness") as string;
+		const endianness = vscode.workspace.getConfiguration().get("tasking-hexeditor.defaultEndianness") as string;
 		const nonce = randomString();
 		return `<!DOCTYPE html>
             <html lang="en">

@@ -1,10 +1,10 @@
 {
-  "name": "hexeditor",
+  "name": "TASKING-hexEditor",
   "displayName": "TASKING Hex Editor",
   "description": "Allows viewing and editing files in a hex editor",
-  "version": "1.0.1",
+  "version": "1.9.13",
   "aiKey": "",
-  "publisher": "iSystemTestPublisher",
+  "publisher": "TASKING-winIDEA",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -23,9 +23,9 @@
   "contributes": {
     "configuration": [
       {
-        "title": "Hex Editor",
+        "title": "TASKING Hex Editor",
         "properties": {
-          "hexeditor.inspectorType": {
+          "tasking-hexeditor.inspectorType": {
             "type": "string",
             "enum": [
               "aside",
@@ -35,18 +35,18 @@
             "default": "aside",
             "description": "Where the data inspector should be shown in the hex editor."
           },
-          "hexeditor.maxFileSize": {
+          "tasking-hexeditor.maxFileSize": {
             "type": "number",
             "minimum": 0,
             "default": 10,
             "description": "The max file size (in MB) that the editor will try to open before warning you."
           },
-          "hexeditor.dataInspector.autoReveal": {
+          "tasking-hexeditor.dataInspector.autoReveal": {
             "type": "boolean",
             "default": true,
             "description": "Whether to auto reveal the data inspector when the hex editor is opened."
           },
-          "hexeditor.defaultEndianness": {
+          "tasking-hexeditor.defaultEndianness": {
             "type": "string",
             "default": "little",
             "enum": [
@@ -55,19 +55,19 @@
             ],
             "description": "The endianness selected when loading the editor."
           },
-          "hexeditor.columnWidth": {
+          "tasking-hexeditor.columnWidth": {
             "type": "integer",
             "default": 16,
             "minimum": 1,
             "maximum": 512,
             "description": "The number of bytes per row to show in the editor."
           },
-          "hexeditor.showDecodedText": {
+          "tasking-hexeditor.showDecodedText": {
             "type": "boolean",
             "default": true,
             "description": "Whether decoded text should be shown in the editor."
           },
-          "hexeditor.showOpenFileButton": {
+          "tasking-hexeditor.showOpenFileButton": {
             "type": "boolean",
             "default": false,
             "description": "Show Hex Editor button in editor menu."
@@ -77,8 +77,8 @@
     ],
     "customEditors": [
       {
-        "viewType": "hexEditor.hexedit",
-        "displayName": "Hex Editor",
+        "viewType": "TASKING-hexEditor.hexedit",
+        "displayName": "TASKING Hex Editor",
         "selector": [
           {
             "filenamePattern": "*"
@@ -89,55 +89,55 @@
     ],
     "commands": [
       {
-        "command": "hexEditor.openFile",
-        "title": "Hex Editor: Open Active File in Hex Editor",
+        "command": "TASKING-hexEditor.openFile",
+        "title": "TASKING Hex Editor: Open Active File in Hex Editor",
         "icon": "$(file-binary)"
       },
       {
-        "command": "hexEditor.goToOffset",
-        "title": "Hex Editor: Go To Offset"
+        "command": "TASKING-hexEditor.goToOffset",
+        "title": "TASKING Hex Editor: Go To Offset"
       }
     ],
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "hexExplorer",
-          "title": "Hex Editor",
+          "id": "TASKING-hexExplorer",
+          "title": "TASKING Hex Editor",
           "icon": "panel-icon.svg",
-          "when": "hexEditor:showSidebarInspector"
+          "when": "TASKING-hexEditor:showSidebarInspector"
         }
       ]
     },
     "views": {
-      "hexExplorer": [
+      "TASKING-hexExplorer": [
         {
           "type": "webview",
-          "id": "hexEditor.dataInspectorView",
+          "id": "TASKING-hexEditor.dataInspectorView",
           "name": "Data Inspector",
-          "when": "hexEditor:showSidebarInspector"
+          "when": "TASKING-hexEditor:showSidebarInspector"
         }
       ]
     },
     "menus": {
       "commandPalette": [
         {
-          "command": "hexEditor.goToOffset",
-          "when": "hexEditor:isActive"
+          "command": "TASKING-hexEditor.goToOffset",
+          "when": "TASKING-hexEditor:isActive"
         }
       ],
       "editor/title": [
         {
-          "when": "activeEditor && config.hexeditor.showOpenFileButton",
-          "command": "hexEditor.openFile",
+          "when": "activeEditor && config.tasking-hexeditor.showOpenFileButton",
+          "command": "TASKING-hexEditor.openFile",
           "group": "navigation@1"
         }
       ]
     },
     "keybindings": [
       {
-        "command": "hexEditor.goToOffset",
+        "command": "TASKING-hexEditor.goToOffset",
         "key": "ctrl+g",
-        "when": "activeCustomEditorId == hexEditor.hexedit"
+        "when": "activeCustomEditorId == TASKING-hexEditor.hexedit"
       }
     ]
   },

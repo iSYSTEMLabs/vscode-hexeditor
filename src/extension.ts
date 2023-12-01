@@ -1,3 +1,5 @@
+// Copyright (c) TASKING
+// Contains work covered by the following terms:
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
@@ -21,7 +23,7 @@ function readConfigFromPackageJson(extension: vscode.Extension<any>): { extId: s
 function reopenWithHexEditor() {
 	const activeTabInput = vscode.window.tabGroups.activeTabGroup.activeTab?.input as { [key: string]: any, uri: vscode.Uri | undefined };
 	if (activeTabInput.uri) {
-		vscode.commands.executeCommand("vscode.openWith", activeTabInput.uri, "hexEditor.hexedit");
+		vscode.commands.executeCommand("vscode.openWith", activeTabInput.uri, "TASKING-hexEditor.hexedit");
 	}
 }
 
@@ -38,8 +40,8 @@ export function activate(context: vscode.ExtensionContext): void {
 
 	const telemetryReporter = new TelemetryReporter(configValues.extId, configValues.version, configValues.aiKey);
 	context.subscriptions.push(telemetryReporter);
-	const openWithCommand = vscode.commands.registerCommand("hexEditor.openFile", reopenWithHexEditor);
-	const goToOffsetCommand = vscode.commands.registerCommand("hexEditor.goToOffset", () => {
+	const openWithCommand = vscode.commands.registerCommand("TASKING-hexEditor.openFile", reopenWithHexEditor);
+	const goToOffsetCommand = vscode.commands.registerCommand("TASKING-hexEditor.goToOffset", () => {
 		const first = registry.activeMessaging[Symbol.iterator]().next();
 		if (first.value) {
 			showGoToOffset(first.value);

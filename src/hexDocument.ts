@@ -54,7 +54,7 @@ export class HexDocument extends Disposable implements vscode.CustomDocument {
 		*/
 		telemetryReporter.sendTelemetryEvent("fileOpen", {}, { "fileSize": fileSize ?? 0 });
 
-		const maxFileSize = (vscode.workspace.getConfiguration().get("hexeditor.maxFileSize") as number) * 1000000;
+		const maxFileSize = (vscode.workspace.getConfiguration().get("tasking-hexeditor.maxFileSize") as number) * 1000000;
 		const isLargeFile = !backupId && !accessor.supportsIncremetalAccess && ((fileSize ?? 0) > maxFileSize);
 		return { document: new HexDocument(model, isLargeFile, baseAddress), accessor };
 	}

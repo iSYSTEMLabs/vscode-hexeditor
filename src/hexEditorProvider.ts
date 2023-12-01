@@ -1,3 +1,5 @@
+// Copyright (c) TASKING
+// Contains work covered by the following terms:
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
@@ -34,7 +36,7 @@ export class HexEditorProvider implements vscode.CustomEditorProvider<HexDocumen
 		);
 	}
 
-	private static readonly viewType = "hexEditor.hexedit";
+	private static readonly viewType = "TASKING-hexEditor.hexedit";
 
 	constructor(
 		private readonly _context: vscode.ExtensionContext,
@@ -187,7 +189,7 @@ export class HexEditorProvider implements vscode.CustomEditorProvider<HexDocumen
 	}
 
 	private readEditorSettings(): IEditorSettings {
-		const config = vscode.workspace.getConfiguration("hexeditor");
+		const config = vscode.workspace.getConfiguration("tasking-hexeditor");
 		const settings: IEditorSettings = { ...defaultEditorSettings };
 		for (const key of editorSettingsKeys) {
 			if (config.has(key)) {
@@ -198,7 +200,7 @@ export class HexEditorProvider implements vscode.CustomEditorProvider<HexDocumen
 	}
 
 	private writeEditorSettings(settings: IEditorSettings) {
-		const config = vscode.workspace.getConfiguration("hexeditor");
+		const config = vscode.workspace.getConfiguration("tasking-hexeditor");
 		for (const key of editorSettingsKeys) {
 			const existing = config.inspect(key);
 			const target = !existing
