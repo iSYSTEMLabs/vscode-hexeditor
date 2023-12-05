@@ -102,7 +102,7 @@ export class HexDocument extends Disposable implements vscode.CustomDocument {
     public async readBufferWithEdits(offset: number, length: number): Promise<Uint8Array> {
         const target = new Uint8Array(length);
         let soFar = 0;
-        for await (const chunk of this.model.readWithEdits(offset)) {
+        for await (const chunk of this.model.readWithEdits(offset, length)) {
             const read = Math.min(chunk.length, target.length - soFar);
             target.set(chunk.subarray(0, read), soFar);
             soFar += read;
