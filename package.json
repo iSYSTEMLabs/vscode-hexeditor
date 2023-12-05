@@ -81,7 +81,7 @@
         "displayName": "TASKING Hex Editor",
         "selector": [
           {
-            "filenamePattern": "*"
+            "filenamePattern": "none"
           }
         ],
         "priority": "option"
@@ -92,6 +92,15 @@
         "command": "TASKING-hexEditor.openFile",
         "title": "TASKING Hex Editor: Open Active File in Hex Editor",
         "icon": "$(file-binary)"
+      },
+      {
+        "command": "TASKING-hexEditor.openDebugMemory",
+        "title": "TASKING Hex Editor: Open memory view",
+        "icon": "$(file-binary)"
+      },
+      {
+        "command": "TASKING-hexEditor.refresh",
+        "title": "TASKING Hex Editor: Refresh memory view"
       },
       {
         "command": "TASKING-hexEditor.goToOffset",
@@ -123,14 +132,27 @@
         {
           "command": "TASKING-hexEditor.goToOffset",
           "when": "TASKING-hexEditor:isActive"
+        },
+        {
+            "command": "TASKING-hexEditor.openDebugMemory",
+            "when": "inDebugMode"
+        },
+        {
+            "command": "TASKING-hexEditor.refresh",
+            "when": "inDebugMode"
         }
       ],
       "editor/title": [
         {
-          "when": "activeEditor && config.tasking-hexeditor.showOpenFileButton",
+          "when": "false && activeEditor && config.tasking-hexeditor.showOpenFileButton",
           "command": "TASKING-hexEditor.openFile",
           "group": "navigation@1"
         }
+      ],
+      "debug/variables/context": [
+          {
+            "command": "TASKING-hexEditor.openDebugMemory"
+          }
       ]
     },
     "keybindings": [
