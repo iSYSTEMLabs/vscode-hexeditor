@@ -7,6 +7,7 @@ import TelemetryReporter from "@vscode/extension-telemetry";
 import * as vscode from "vscode";
 import { ExtensionHostMessageHandler, MessageType } from "../shared/protocol";
 import { DataInspectorView } from "./dataInspectorView";
+import { onMessageReceived } from "./debugTracker";
 import { showGoToOffset } from "./goToOffset";
 import { HexEditorProvider } from "./hexEditorProvider";
 import { HexEditorRegistry } from "./hexEditorRegistry";
@@ -101,6 +102,14 @@ export function activate(context: vscode.ExtensionContext): void {
     context.subscriptions.push(openDebugCommand);
     context.subscriptions.push(telemetryReporter);
     context.subscriptions.push(HexEditorProvider.register(context, telemetryReporter, dataInspectorProvider, registry));
+
+    vscode.debug.registerDebugAdapterTrackerFactory("*", {
+        createDebugAdapterTracker(_session: vscode.DebugSession) {
+            return {
+                onDidSendMessage: m => onMessageReceived(m, registry)
+            };
+        }
+    });
 
 }
 

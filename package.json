@@ -20,6 +20,9 @@
     },
     "virtualWorkspaces": true
   },
+  "activationEvents": [
+    "onDebug"
+  ],
   "contributes": {
     "configuration": [
       {
