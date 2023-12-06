@@ -2,9 +2,18 @@
 
 ## 1.9.13 - 
 
-- Renamed to Tasking HexEditor
+### Fixes:
+
 - Debug memory can now scroll up
 - Fixed debug memory showing whole page as empty if part of memory was unreadable
+- Fixed goToOffset not working for large jumps
+
+### Changes:
+
+- Debug memory can now be opened with the Open debug memory command
+- Can now only be used to view debug memory, and can only have one window open at a time
+- Added command to go to any variable from the variables view
+- Memory will now refresh on debug step/setVariable/setExpression
 
 ## 1.9.11 - January 25, 2023
 

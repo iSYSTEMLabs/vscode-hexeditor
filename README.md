@@ -1,3 +1,24 @@
+
+A fork of vscode.hexEditor extension with improvements that make the extension more fitting as a debug memory viewer. Compatible with any debugger that implements the Debug Adapter Protocol and implements the readMemory request.
+
+### Changes:
+
+- Can no longer be used to open files
+- To open debug memory for currently active debug session, use the ```Open debug memory``` command
+- Added command to go to any variable in the variables view that has a memory reference
+- Memory now refreshes on any debug operatons that may cause a change (step, pause, setVariable)
+
+### Fixes:
+
+- If part of memory was unreadable, will now show that part as 00 instead of showing whole page as blank
+- Fixed large jumps using goToOffset not working
+
+### Known issues:
+
+- Memory that has been changed through the memory viewer will no longer be updated on debug operations. Use the ```Refresh memory view``` command to make it update again.
+
+## Original readme:
+
 A custom editor extension for Visual Studio Code which provides a hex editor for viewing and manipulating files in their raw hexadecimal representation.
 
 ## Features
