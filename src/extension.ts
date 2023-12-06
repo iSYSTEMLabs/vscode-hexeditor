@@ -22,13 +22,6 @@ function readConfigFromPackageJson(extension: vscode.Extension<any>): { extId: s
     };
 }
 
-function reopenWithHexEditor() {
-    const activeTabInput = vscode.window.tabGroups.activeTabGroup.activeTab?.input as { [key: string]: any, uri: vscode.Uri | undefined };
-    if (activeTabInput.uri) {
-        vscode.commands.executeCommand("vscode.openWith", activeTabInput.uri, "TASKING-hexEditor.hexedit");
-    }
-}
-
 async function openDebugMemory(memoryRef: number, sessionId: string, registry: HexEditorRegistry) {
 
     //close any other memory views, only one must be visible at all times
@@ -80,14 +73,24 @@ export function activate(context: vscode.ExtensionContext): void {
 
         openDebugMemory(memoryRef, session.id, registry);
     });
-    const goToOffsetCommand = vscode.commands.registerCommand("TASKING-hexEditor.goToOffset", () => {
+    const goToOffsetCommand = vscode.commands.registerCommand("TASKING-hexEditor.goToOffset", (offset) => {
+
         const first = registry.activeMessaging[Symbol.iterator]().next();
+
         if (first.value && registry.activeDocument) {
-            showGoToOffset(first.value, registry.activeDocument?.baseAddress);
+            if (offset !== undefined) {
+                if (Math.abs(offset - registry.activeDocument.baseAddress) <= 4096) {
+                    first.value.sendEvent({ type: MessageType.SetFocusedByte, offset: offset });
+                } else {
+                    vscode.commands.executeCommand("TASKING-hexEditor.openDebugMemory", offset);
+                }
+            } else {
+                showGoToOffset(first.value, registry.activeDocument?.baseAddress);
+            }
+        } else {
+            vscode.commands.executeCommand("TASKING-hexEditor.openDebugMemory", offset);
         }
-        else {
-            vscode.commands.executeCommand("TASKING-hexEditor.openDebugMemory");
-        }
+
     });
     const goToVarCommand = vscode.commands.registerCommand("TASKING-hexEditor.goToVariable", () => {
         const first = registry.activeMessaging[Symbol.iterator]().next();
