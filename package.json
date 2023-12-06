@@ -107,7 +107,15 @@
       },
       {
         "command": "TASKING-hexEditor.goToOffset",
-        "title": "TASKING Hex Editor: Go To Offset"
+        "title": "TASKING Hex Editor: Go To Offset",
+        "shortTitle": "Go To Offset",
+        "icon": "$(file-binary)"
+      },
+      {
+        "command": "TASKING-hexEditor.goToVariable",
+        "title": "TASKING Hex Editor: Go To Variable",
+        "shortTitle": "Go To Variable",
+        "icon": "$(go-to-file)"
       }
     ],
     "viewsContainers": {
@@ -133,16 +141,20 @@
     "menus": {
       "commandPalette": [
         {
-          "command": "TASKING-hexEditor.goToOffset",
-          "when": "TASKING-hexEditor:isActive"
+            "command": "TASKING-hexEditor.goToOffset",
+            "when": "inDebugMode"
+        },
+        {
+            "command": "TASKING-hexEditor.goToVariable",
+            "when": "inDebugMode"
         },
         {
             "command": "TASKING-hexEditor.openDebugMemory",
-            "when": "inDebugMode"
+            "when": "inDebugMode && !TASKING-hexEditor:isActive"
         },
         {
             "command": "TASKING-hexEditor.refresh",
-            "when": "inDebugMode"
+            "when": "TASKING-hexEditor:isActive"
         }
       ],
       "editor/title": [
@@ -152,18 +164,29 @@
           "group": "navigation@1"
         }
       ],
-      "debug/variables/context": [
-          {
-            "command": "TASKING-hexEditor.openDebugMemory"
-          }
+      "editor/title/run": [
+        {
+            "command": "TASKING-hexEditor.goToVariable",
+            "when": "activeCustomEditorId==TASKING-hexEditor.hexedit",
+            "group": "navigation@0"
+        },
+        {
+            "command": "TASKING-hexEditor.goToOffset",
+            "when": "activeCustomEditorId==TASKING-hexEditor.hexedit",
+            "group": "navigation@1"
+        }
       ]
     },
     "keybindings": [
-      {
-        "command": "TASKING-hexEditor.goToOffset",
-        "key": "ctrl+g",
-        "when": "activeCustomEditorId == TASKING-hexEditor.hexedit"
-      }
+        {
+            "command": "TASKING-hexEditor.goToOffset",
+            "key": "ctrl+g",
+            "when": "activeCustomEditorId == TASKING-hexEditor.hexedit"
+        },{
+            "command": "TASKING-hexEditor.goToVariable",
+            "key": "ctrl+t",
+            "when": "activeCustomEditorId == TASKING-hexEditor.hexedit"
+        }
     ]
   },
   "scripts": {

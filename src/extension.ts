@@ -7,7 +7,7 @@ import TelemetryReporter from "@vscode/extension-telemetry";
 import * as vscode from "vscode";
 import { ExtensionHostMessageHandler, MessageType } from "../shared/protocol";
 import { DataInspectorView } from "./dataInspectorView";
-import { onMessageReceived } from "./debugTracker";
+import { onMessageReceived, showGoToVariable } from "./debugTracker";
 import { showGoToOffset } from "./goToOffset";
 import { HexEditorProvider } from "./hexEditorProvider";
 import { HexEditorRegistry } from "./hexEditorRegistry";
@@ -43,8 +43,7 @@ async function openDebugMemory(memoryRef: number, sessionId: string, registry: H
     //open memory view with a command
     const uri = vscode.Uri.parse("vscode-debug-memory://" + sessionId + "/" + "0x0" + "/memory.bin?baseAddress=" + memoryRef);
 
-    await vscode.commands.executeCommand("vscode.openWith", uri, "TASKING-hexEditor.hexedit");
-    await vscode.commands.executeCommand("workbench.action.moveEditorToNextGroup");
+    await vscode.commands.executeCommand("vscode.openWith", uri, "TASKING-hexEditor.hexedit", { viewColumn: vscode.ViewColumn.Beside });
 
     //wait a bit for init, then select the opened address
     setTimeout(() => {
@@ -87,16 +86,27 @@ export function activate(context: vscode.ExtensionContext): void {
         if (first.value && registry.activeDocument) {
             showGoToOffset(first.value, registry.activeDocument?.baseAddress);
         }
+        else {
+            vscode.commands.executeCommand("TASKING-hexEditor.openDebugMemory");
+        }
+    });
+    const goToVarCommand = vscode.commands.registerCommand("TASKING-hexEditor.goToVariable", () => {
+        const first = registry.activeMessaging[Symbol.iterator]().next();
+        if (first.value && registry.activeDocument) {
+            showGoToVariable(first.value, registry.activeDocument?.baseAddress);
+        }
+        else {
+            vscode.commands.executeCommand("TASKING-hexEditor.openDebugMemory");
+        }
     });
     const refreshCommand = vscode.commands.registerCommand("TASKING-hexEditor.refresh", () => {
-        const first = registry.activeMessaging[Symbol.iterator]().next();
-        if (first.value) {
-            const messaging: ExtensionHostMessageHandler = first.value;
-            messaging.sendEvent({ type: MessageType.ReloadFromDisk });
+        if (registry.activeDocument) {
+            vscode.commands.executeCommand("TASKING-hexEditor.openDebugMemory", registry.activeDocument.baseAddress);
         }
     });
     context.subscriptions.push(new StatusSelectionCount(registry));
     context.subscriptions.push(goToOffsetCommand);
+    context.subscriptions.push(goToVarCommand);
     context.subscriptions.push(openWithCommand);
     context.subscriptions.push(refreshCommand);
     context.subscriptions.push(openDebugCommand);
