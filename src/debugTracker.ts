@@ -14,8 +14,12 @@ export function onMessageReceived(message: any, registry: HexEditorRegistry) {
         registry.refreshAllEditors();
         allVariables = [];
     }
-    else if (message.type === "response" && (["setVariable", "setExpression", "writeMemory"].includes(message.command))) {
+    else if (message.type === "response" && (["setVariable", "writeMemory"].includes(message.command))) {
         registry.refreshAllEditors();
+    }
+    else if (message.type === "response" && (["setExpression"].includes(message.command))) {
+        registry.refreshAllEditors();
+        allVariables = [];
     }
     else if (message.type === "response" && (["variables"].includes(message.command))) {
         allVariables = allVariables.concat(message.body.variables);
