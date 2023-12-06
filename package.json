@@ -69,11 +69,6 @@
             "type": "boolean",
             "default": true,
             "description": "Whether decoded text should be shown in the editor."
-          },
-          "tasking-hexeditor.showOpenFileButton": {
-            "type": "boolean",
-            "default": false,
-            "description": "Show Hex Editor button in editor menu."
           }
         }
       }
@@ -91,11 +86,6 @@
       }
     ],
     "commands": [
-      {
-        "command": "TASKING-hexEditor.openFile",
-        "title": "TASKING Hex Editor: Open Active File in Hex Editor",
-        "icon": "$(file-binary)"
-      },
       {
         "command": "TASKING-hexEditor.openDebugMemory",
         "title": "TASKING Hex Editor: Open memory view",
@@ -158,13 +148,6 @@
         }
       ],
       "editor/title": [
-        {
-          "when": "false && activeEditor && config.tasking-hexeditor.showOpenFileButton",
-          "command": "TASKING-hexEditor.openFile",
-          "group": "navigation@1"
-        }
-      ],
-      "editor/title/run": [
         {
             "command": "TASKING-hexEditor.goToVariable",
             "when": "activeCustomEditorId==TASKING-hexEditor.hexedit",

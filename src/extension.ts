@@ -69,7 +69,6 @@ export function activate(context: vscode.ExtensionContext): void {
 
     const telemetryReporter = new TelemetryReporter(configValues.extId, configValues.version, configValues.aiKey);
     context.subscriptions.push(telemetryReporter);
-    const openWithCommand = vscode.commands.registerCommand("TASKING-hexEditor.openFile", reopenWithHexEditor);
     const openDebugCommand = vscode.commands.registerCommand("TASKING-hexEditor.openDebugMemory", async (memoryRef) => {
         const session = vscode.debug.activeDebugSession;
         if (session === undefined) {
@@ -107,7 +106,6 @@ export function activate(context: vscode.ExtensionContext): void {
     context.subscriptions.push(new StatusSelectionCount(registry));
     context.subscriptions.push(goToOffsetCommand);
     context.subscriptions.push(goToVarCommand);
-    context.subscriptions.push(openWithCommand);
     context.subscriptions.push(refreshCommand);
     context.subscriptions.push(openDebugCommand);
     context.subscriptions.push(telemetryReporter);
